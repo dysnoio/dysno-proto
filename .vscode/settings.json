@@ -1,0 +1,14 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#472321",
+        "titleBar.activeBackground": "#63312E",
+        "titleBar.activeForeground": "#FCF9F9"
+    },
+    "protoc": {
+        "compile_on_save": false,
+        "options": [
+            "--proto_path=${workspaceRoot}/proto",
+            "--go_out=${workspaceRoot}/go",
+        ]
+    },
+}
