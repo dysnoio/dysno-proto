@@ -20,68 +20,20 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Person_PhoneType int32
-
-const (
-	Person_MOBILE Person_PhoneType = 0
-	Person_HOME   Person_PhoneType = 1
-	Person_WORK   Person_PhoneType = 2
-)
-
-// Enum value maps for Person_PhoneType.
-var (
-	Person_PhoneType_name = map[int32]string{
-		0: "MOBILE",
-		1: "HOME",
-		2: "WORK",
-	}
-	Person_PhoneType_value = map[string]int32{
-		"MOBILE": 0,
-		"HOME":   1,
-		"WORK":   2,
-	}
-)
-
-func (x Person_PhoneType) Enum() *Person_PhoneType {
-	p := new(Person_PhoneType)
-	*p = x
-	return p
-}
-
-func (x Person_PhoneType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (Person_PhoneType) Descriptor() protoreflect.EnumDescriptor {
-	return file_message_proto_enumTypes[0].Descriptor()
-}
-
-func (Person_PhoneType) Type() protoreflect.EnumType {
-	return &file_message_proto_enumTypes[0]
-}
-
-func (x Person_PhoneType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use Person_PhoneType.Descriptor instead.
-func (Person_PhoneType) EnumDescriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{0, 0}
-}
-
-type Person struct {
+type Message struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name   string                `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Id     int32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"` // Unique ID number for this person.
-	Email  string                `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Phones []*Person_PhoneNumber `protobuf:"bytes,4,rep,name=phones,proto3" json:"phones,omitempty"`
+	// Types that are assignable to Message:
+	//
+	//	*Message_Basic
+	//	*Message_Advanced
+	Message isMessage_Message `protobuf_oneof:"message"`
 }
 
-func (x *Person) Reset() {
-	*x = Person{}
+func (x *Message) Reset() {
+	*x = Message{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_message_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -89,13 +41,13 @@ func (x *Person) Reset() {
 	}
 }
 
-func (x *Person) String() string {
+func (x *Message) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Person) ProtoMessage() {}
+func (*Message) ProtoMessage() {}
 
-func (x *Person) ProtoReflect() protoreflect.Message {
+func (x *Message) ProtoReflect() protoreflect.Message {
 	mi := &file_message_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -107,50 +59,59 @@ func (x *Person) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Person.ProtoReflect.Descriptor instead.
-func (*Person) Descriptor() ([]byte, []int) {
+// Deprecated: Use Message.ProtoReflect.Descriptor instead.
+func (*Message) Descriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Person) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Person) GetId() int32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *Person) GetEmail() string {
-	if x != nil {
-		return x.Email
-	}
-	return ""
-}
-
-func (x *Person) GetPhones() []*Person_PhoneNumber {
-	if x != nil {
-		return x.Phones
+func (m *Message) GetMessage() isMessage_Message {
+	if m != nil {
+		return m.Message
 	}
 	return nil
 }
 
-// Our address book file is just one of these.
-type AddressBook struct {
+func (x *Message) GetBasic() *BasicMessage {
+	if x, ok := x.GetMessage().(*Message_Basic); ok {
+		return x.Basic
+	}
+	return nil
+}
+
+func (x *Message) GetAdvanced() *AdvancedMessage {
+	if x, ok := x.GetMessage().(*Message_Advanced); ok {
+		return x.Advanced
+	}
+	return nil
+}
+
+type isMessage_Message interface {
+	isMessage_Message()
+}
+
+type Message_Basic struct {
+	Basic *BasicMessage `protobuf:"bytes,1,opt,name=basic,proto3,oneof"`
+}
+
+type Message_Advanced struct {
+	Advanced *AdvancedMessage `protobuf:"bytes,2,opt,name=advanced,proto3,oneof"`
+}
+
+func (*Message_Basic) isMessage_Message() {}
+
+func (*Message_Advanced) isMessage_Message() {}
+
+type BasicMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	People []*Person `protobuf:"bytes,1,rep,name=people,proto3" json:"people,omitempty"`
+	Type    string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Payload string `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
 }
 
-func (x *AddressBook) Reset() {
-	*x = AddressBook{}
+func (x *BasicMessage) Reset() {
+	*x = BasicMessage{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_message_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -158,13 +119,13 @@ func (x *AddressBook) Reset() {
 	}
 }
 
-func (x *AddressBook) String() string {
+func (x *BasicMessage) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AddressBook) ProtoMessage() {}
+func (*BasicMessage) ProtoMessage() {}
 
-func (x *AddressBook) ProtoReflect() protoreflect.Message {
+func (x *BasicMessage) ProtoReflect() protoreflect.Message {
 	mi := &file_message_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -176,29 +137,38 @@ func (x *AddressBook) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AddressBook.ProtoReflect.Descriptor instead.
-func (*AddressBook) Descriptor() ([]byte, []int) {
+// Deprecated: Use BasicMessage.ProtoReflect.Descriptor instead.
+func (*BasicMessage) Descriptor() ([]byte, []int) {
 	return file_message_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AddressBook) GetPeople() []*Person {
+func (x *BasicMessage) GetType() string {
 	if x != nil {
-		return x.People
+		return x.Type
 	}
-	return nil
+	return ""
 }
 
-type Person_PhoneNumber struct {
+func (x *BasicMessage) GetPayload() string {
+	if x != nil {
+		return x.Payload
+	}
+	return ""
+}
+
+type AdvancedMessage struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Number string           `protobuf:"bytes,1,opt,name=number,proto3" json:"number,omitempty"`
-	Type   Person_PhoneType `protobuf:"varint,2,opt,name=type,proto3,enum=main.Person_PhoneType" json:"type,omitempty"`
+	Type     string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Payload  string `protobuf:"bytes,2,opt,name=payload,proto3" json:"payload,omitempty"`
+	Sender   string `protobuf:"bytes,3,opt,name=sender,proto3" json:"sender,omitempty"`
+	Receiver string `protobuf:"bytes,4,opt,name=receiver,proto3" json:"receiver,omitempty"`
 }
 
-func (x *Person_PhoneNumber) Reset() {
-	*x = Person_PhoneNumber{}
+func (x *AdvancedMessage) Reset() {
+	*x = AdvancedMessage{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_message_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -206,13 +176,13 @@ func (x *Person_PhoneNumber) Reset() {
 	}
 }
 
-func (x *Person_PhoneNumber) String() string {
+func (x *AdvancedMessage) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Person_PhoneNumber) ProtoMessage() {}
+func (*AdvancedMessage) ProtoMessage() {}
 
-func (x *Person_PhoneNumber) ProtoReflect() protoreflect.Message {
+func (x *AdvancedMessage) ProtoReflect() protoreflect.Message {
 	mi := &file_message_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -224,50 +194,64 @@ func (x *Person_PhoneNumber) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Person_PhoneNumber.ProtoReflect.Descriptor instead.
-func (*Person_PhoneNumber) Descriptor() ([]byte, []int) {
-	return file_message_proto_rawDescGZIP(), []int{0, 0}
+// Deprecated: Use AdvancedMessage.ProtoReflect.Descriptor instead.
+func (*AdvancedMessage) Descriptor() ([]byte, []int) {
+	return file_message_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Person_PhoneNumber) GetNumber() string {
+func (x *AdvancedMessage) GetType() string {
 	if x != nil {
-		return x.Number
+		return x.Type
 	}
 	return ""
 }
 
-func (x *Person_PhoneNumber) GetType() Person_PhoneType {
+func (x *AdvancedMessage) GetPayload() string {
 	if x != nil {
-		return x.Type
+		return x.Payload
 	}
-	return Person_MOBILE
+	return ""
+}
+
+func (x *AdvancedMessage) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *AdvancedMessage) GetReceiver() string {
+	if x != nil {
+		return x.Receiver
+	}
+	return ""
 }
 
 var File_message_proto protoreflect.FileDescriptor
 
 var file_message_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x04, 0x6d, 0x61, 0x69, 0x6e, 0x22, 0xf4, 0x01, 0x0a, 0x06, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e,
-	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05,
-	0x52, 0x02, 0x69, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x03, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x30, 0x0a, 0x06, 0x70, 0x68,
-	0x6f, 0x6e, 0x65, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x18, 0x2e, 0x6d, 0x61, 0x69,
-	0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75,
-	0x6d, 0x62, 0x65, 0x72, 0x52, 0x06, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x73, 0x1a, 0x51, 0x0a, 0x0b,
-	0x50, 0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x6e,
-	0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6e, 0x75, 0x6d,
-	0x62, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
-	0x0e, 0x32, 0x16, 0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x2e,
-	0x50, 0x68, 0x6f, 0x6e, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22,
-	0x2b, 0x0a, 0x09, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0a, 0x0a, 0x06,
-	0x4d, 0x4f, 0x42, 0x49, 0x4c, 0x45, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x48, 0x4f, 0x4d, 0x45,
-	0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x57, 0x4f, 0x52, 0x4b, 0x10, 0x02, 0x22, 0x33, 0x0a, 0x0b,
-	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x42, 0x6f, 0x6f, 0x6b, 0x12, 0x24, 0x0a, 0x06, 0x70,
-	0x65, 0x6f, 0x70, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x6d, 0x61,
-	0x69, 0x6e, 0x2e, 0x50, 0x65, 0x72, 0x73, 0x6f, 0x6e, 0x52, 0x06, 0x70, 0x65, 0x6f, 0x70, 0x6c,
-	0x65, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x2f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x04, 0x6d, 0x61, 0x69, 0x6e, 0x22, 0x75, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x12, 0x2a, 0x0a, 0x05, 0x62, 0x61, 0x73, 0x69, 0x63, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x12, 0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x42, 0x61, 0x73, 0x69, 0x63, 0x4d, 0x65, 0x73, 0x73,
+	0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x05, 0x62, 0x61, 0x73, 0x69, 0x63, 0x12, 0x33, 0x0a, 0x08,
+	0x61, 0x64, 0x76, 0x61, 0x6e, 0x63, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x15,
+	0x2e, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x41, 0x64, 0x76, 0x61, 0x6e, 0x63, 0x65, 0x64, 0x4d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x48, 0x00, 0x52, 0x08, 0x61, 0x64, 0x76, 0x61, 0x6e, 0x63, 0x65,
+	0x64, 0x42, 0x09, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x3c, 0x0a, 0x0c,
+	0x42, 0x61, 0x73, 0x69, 0x63, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04,
+	0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65,
+	0x12, 0x18, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22, 0x73, 0x0a, 0x0f, 0x41, 0x64,
+	0x76, 0x61, 0x6e, 0x63, 0x65, 0x64, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x73,
+	0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x6e,
+	0x64, 0x65, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x63, 0x65, 0x69, 0x76, 0x65, 0x72, 0x42,
+	0x0b, 0x5a, 0x09, 0x2e, 0x2f, 0x6e, 0x65, 0x74, 0x77, 0x6f, 0x72, 0x6b, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -282,23 +266,20 @@ func file_message_proto_rawDescGZIP() []byte {
 	return file_message_proto_rawDescData
 }
 
-var file_message_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_message_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_message_proto_goTypes = []interface{}{
-	(Person_PhoneType)(0),      // 0: main.Person.PhoneType
-	(*Person)(nil),             // 1: main.Person
-	(*AddressBook)(nil),        // 2: main.AddressBook
-	(*Person_PhoneNumber)(nil), // 3: main.Person.PhoneNumber
+	(*Message)(nil),         // 0: main.Message
+	(*BasicMessage)(nil),    // 1: main.BasicMessage
+	(*AdvancedMessage)(nil), // 2: main.AdvancedMessage
 }
 var file_message_proto_depIdxs = []int32{
-	3, // 0: main.Person.phones:type_name -> main.Person.PhoneNumber
-	1, // 1: main.AddressBook.people:type_name -> main.Person
-	0, // 2: main.Person.PhoneNumber.type:type_name -> main.Person.PhoneType
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	1, // 0: main.Message.basic:type_name -> main.BasicMessage
+	2, // 1: main.Message.advanced:type_name -> main.AdvancedMessage
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_message_proto_init() }
@@ -308,7 +289,7 @@ func file_message_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_message_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Person); i {
+			switch v := v.(*Message); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -320,7 +301,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AddressBook); i {
+			switch v := v.(*BasicMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -332,7 +313,7 @@ func file_message_proto_init() {
 			}
 		}
 		file_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Person_PhoneNumber); i {
+			switch v := v.(*AdvancedMessage); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -344,19 +325,22 @@ func file_message_proto_init() {
 			}
 		}
 	}
+	file_message_proto_msgTypes[0].OneofWrappers = []interface{}{
+		(*Message_Basic)(nil),
+		(*Message_Advanced)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_message_proto_rawDesc,
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_message_proto_goTypes,
 		DependencyIndexes: file_message_proto_depIdxs,
-		EnumInfos:         file_message_proto_enumTypes,
 		MessageInfos:      file_message_proto_msgTypes,
 	}.Build()
 	File_message_proto = out.File
