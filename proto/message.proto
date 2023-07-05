@@ -5,22 +5,26 @@ package main;
 option go_package = "./network";
 
 message Message {
-  oneof message {
-    BasicMessage basic = 1;
-    AdvancedMessage advanced = 2;
+
+  message Basic {
+    string type = 1;
+    bytes payload = 2;
   }
+
+  message Advanced {
+    string type = 1;
+    bytes payload = 2;
+    string sender = 3;
+    string receiver = 4;
+  }
+
+  oneof message {
+    Basic basic = 1;
+    Advanced advanced = 2;
+  }
+
 }
 
-message BasicMessage {
-  string type = 1;
-  bytes payload = 2;
-}
 
-message AdvancedMessage {
-  string type = 1;
-  bytes payload = 2;
-  string sender = 3;
-  string receiver = 4;
-}
 
   
