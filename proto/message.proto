@@ -13,12 +13,12 @@ message Message {
 
 message BasicMessage {
   string type = 1;
-  string payload = 2;
+  bytes payload = 2;
 }
 
 message AdvancedMessage {
   string type = 1;
-  string payload = 2;
+  bytes payload = 2;
   string sender = 3;
   string receiver = 4;
 }
